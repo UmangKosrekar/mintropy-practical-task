@@ -1,0 +1,41 @@
+>> Projects made under Xopple Infotech.
+ - Source code can't be provided due to NDA agreement
+
+1. Endless Events
+- https://www.endlessevent.com/
+- Online ticket booking platform
+- Online payment gateway: Razorpay and Stripe as main, Phonepe and Authorize.net as backup
+- Ticket Sharing
+- Seatsio integration
+- Change region to India from top right corner.
+
+2. Doorvenza
+- https://www.doorvenza.com/
+- Under Development
+- Home delivery app
+- Partnered with Doordash for Delivery partner
+
+>> Projects created to learn new things
+
+1. Sharp and EJS project
+- Link: https://us-central1-phoenix-corp-104.cloudfunctions.net/api
+- Target: To learn about Sharp & EJS
+- Source: https://github.com/UmangKosrekar/sharp-npm-use
+
+2. Multi-Webhook
+- Working on it
+- Target: To learn how frontend works
+- Source: https://github.com/UmangKosrekar/multi-webhook-pack
+
+3. Tic-Tac-Toe game
+- Not live
+- Target: Explore Socket.io
+- Source: https://github.com/UmangKosrekar/socket-tic-tac-toe
+
+4. Demo Project for Nestjs
+- Not live
+- Target: Explore Nestjs framework
+- Source: https://github.com/UmangKosrekar/nest_example
+
+>> LeetCode profile
+- https://leetcode.com/u/Umang104/
