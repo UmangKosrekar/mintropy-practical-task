@@ -1,0 +1,38 @@
+MongoDB Query Challenge
+Schema
+Orders Collection
+{
+    "_id": ObjectId,
+    "orderId": Number,
+    "customerId": ObjectId,
+    "orderDate": ISODate,
+    "totalAmount": Number
+}
+Customers Collection
+{
+    "_id": ObjectId,
+    "customerId": Number,
+    "name": String,
+    "city": String
+}
+Task: Write MongoDB Aggregation Queries
+- Find the total sales for each customer.
+- Use $group to sum up totalAmount for each customerId, and then use $lookup to join with the Customers collection to retrieve customer details.
+
+db.getCollection("Orders").aggregate([
+    {
+        $group: {
+            _id: "customerId",
+            totalAmount: {$sum: "$totalAmount"}
+        }
+    },
+    {
+        $lookup:{
+            from: "Customers",
+            localField: "_id",
+            foreignField: "_id",
+            as: "customers"
+        }
+    },
+    {$unwind: "$customers"}
+])

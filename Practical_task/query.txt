@@ -1,0 +1,143 @@
+Database Management Exercise: MongoDB Query Challenge
+
+In this exercise, you will be given a MongoDB schema and specific use cases to write queries. The goal is to evaluate your ability to write efficient and accurate MongoDB queries for various scenarios, including aggregations, joins (using `$lookup`), and performance optimization.
+
+Database Schema
+Below are the collections that you will use for this exercise:
+
+1. **Employees**
+
+   {
+   "\_id": ObjectId,
+   "name": String,
+   "departmentId": ObjectId,
+   "salary": Number,
+   "dateOfJoining": ISODate
+   }
+
+2. **Departments**
+
+   {
+   "\_id": ObjectId,
+   "departmentName": String
+   }
+
+
+Exercise Scenarios
+1.	Retrieve the names of all employees who joined in the last 5 years.
+2.	Find the name of the department and the total salary paid to employees in each department. Sort the results by total salary in descending order.
+3.	Write a query to list all employees who earn more than the average salary of their department.
+4.	Display the names of employees along with their department names. Include employees who do not belong to any department.
+5.	Identify departments with no employees assigned to them.
+
+ANSWERS:
+1. Two methods to do this
+db.getCollection("Employees").aggregate([{
+    $match: {dateOfJoining: ISODate("2019-12-04T00:00:00.000+0000")}
+},
+{
+    $project: {_id: 0, name:1}
+}])
+
+db.getCollection("Employees").find({dateOfJoining: ISODate("2019-12-04T00:00:00.000+0000")}, {_id: 0, name:1})
+
+2. 
+db.getCollection("Departments").aggregate([
+{
+    $lookup:{
+        from: "Employees",
+        localField: "_id",
+        foreignField: "departmentId",
+        as: "employees"
+    }
+},
+{
+    $project: {
+        departmentName:1,
+        totalSalary: {
+            $sum: "$employees.salary"
+        }
+    }
+},
+{
+    $sort: {totalSalary:-1}
+}
+])
+
+3.
+db.getCollection("Employees").aggregate([
+    {
+        $lookup: {
+            from: "Employees",
+            localField: "departmentId",
+            foreignField: "departmentId",
+            as: "employees"
+        }
+    },
+    {
+        $addFields: {
+            avgSalary: { $divide: [{ $sum: "$employees.salary" }, { $size: "$employees" }] }
+        }
+    },
+    {
+        $match: {
+            $expr: { $gt: ['$salary', '$avgSalary'] }
+        }
+    },
+    {
+        $project: {
+            name: 1,
+            salary: 1,
+            avgSalary: 1
+        }
+    }
+])
+
+4.
+db.getCollection("Employees").aggregate([
+    {
+        $lookup: {
+            from: "Departments",
+            localField: "departmentId",
+            foreignField: "_id",
+            as: "department"
+        }
+    },
+    {
+        $project: {
+            name: 1,
+            departmentName: {$first: "$department.departmentName"}
+        }
+    }
+])
+
+5.
+db.getCollection("Departments").aggregate([
+    {
+        $lookup: {
+            from: "Employees",
+            localField: "_id",
+            foreignField: "departmentId",
+            as: "employees"
+        }
+    },
+    {
+        $match: {
+            employees: []
+        }
+    },
+    {
+        $project: {
+            departmentName: 1
+        }
+    }
+])
+
+6.
+db.getCollection("Employees").aggregate([{
+    $match: {dateOfJoining: ISODate("2019-12-04T00:00:00.000+0000")}
+},
+{
+    $project: {_id: 0, name:1}
+}])
+db.getCollection("Employees").find({dateOfJoining: ISODate("2019-12-04T00:00:00.000+0000")}, {_id: 0, name:1})
